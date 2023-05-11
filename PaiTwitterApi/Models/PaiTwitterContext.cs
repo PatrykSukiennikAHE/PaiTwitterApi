@@ -13,6 +13,10 @@ namespace PaiTwitterApi.Models
         }
 
         public virtual DbSet<TUser> TUser { get; set; }
+        public virtual DbSet<TComment> TComment { get; set; }
+        public virtual DbSet<TFollow> TFollow { get; set; }
+        public virtual DbSet<TLike> TLike { get; set; }
+        public virtual DbSet<TPost> TPost { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
