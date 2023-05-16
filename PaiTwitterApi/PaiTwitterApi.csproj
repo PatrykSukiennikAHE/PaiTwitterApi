@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20230511145356_DataModels.cs" />
     <Compile Remove="Migrations\20230511145356_DataModels.Designer.cs" />
+    <Compile Remove="Migrations\20230516051129_PostId for Like.cs" />
+    <Compile Remove="Migrations\20230516051129_PostId for Like.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

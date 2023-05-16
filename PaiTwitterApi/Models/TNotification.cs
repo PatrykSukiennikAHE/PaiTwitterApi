@@ -7,18 +7,16 @@ using System.Threading.Tasks;
 
 namespace PaiTwitterApi.Models
 {
-    public class TFollow
+    public class TNotification
     {
         [Key]
-        public int FollowId { get; set; }
-        public int FollowedId { get; set; }
-        public int FollowerId { get; set; }
+        public int NotificationId { get; set; }
+        public int UserId { get; set; }
+        public string Content { get; set; }
+        public DateTime ReadDate { get; set; }
         public DateTime CreatedDate { get; set; }
 
-        [ForeignKey("FollowedId")]
-        public TUser Followed;
-
-        [ForeignKey("FollowerId")]
-        public TUser Follower;
+        [ForeignKey("UserId")]
+        public TUser User;
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PaiTwitterApi.Models;
 
 namespace PaiTwitterApi.Migrations
 {
     [DbContext(typeof(PaiTwitterContext))]
-    partial class PaiTwitterContextModelSnapshot : ModelSnapshot
+    [Migration("20230516051215_PostId for tComment")]
+    partial class PostIdfortComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,13 +34,15 @@ namespace PaiTwitterApi.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CreatorId")
+                    b.Property<int?>("CreatorIdUserId")
                         .HasColumnType("int");
 
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
                     b.HasKey("CommentId");
+
+                    b.HasIndex("CreatorIdUserId");
 
                     b.ToTable("TComment");
                 });
@@ -53,13 +57,17 @@ namespace PaiTwitterApi.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FollowedId")
+                    b.Property<int?>("FollowedIdUserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FollowerId")
+                    b.Property<int?>("FollowerIdUserId")
                         .HasColumnType("int");
 
                     b.HasKey("FollowId");
+
+                    b.HasIndex("FollowedIdUserId");
+
+                    b.HasIndex("FollowerIdUserId");
 
                     b.ToTable("TFollow");
                 });
@@ -71,45 +79,27 @@ namespace PaiTwitterApi.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CommentId")
+                    b.Property<int?>("CommentId1")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CreatorId")
+                    b.Property<int?>("CreatorIdUserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PostId")
+                    b.Property<int?>("PostId1")
                         .HasColumnType("int");
 
                     b.HasKey("LikeId");
 
+                    b.HasIndex("CommentId1");
+
+                    b.HasIndex("CreatorIdUserId");
+
+                    b.HasIndex("PostId1");
+
                     b.ToTable("TLike");
-                });
-
-            modelBuilder.Entity("PaiTwitterApi.Models.TNotification", b =>
-                {
-                    b.Property<int>("NotificationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ReadDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("NotificationId");
-
-                    b.ToTable("TNotification");
                 });
 
             modelBuilder.Entity("PaiTwitterApi.Models.TPost", b =>
@@ -125,16 +115,20 @@ namespace PaiTwitterApi.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CreatorId")
+                    b.Property<int?>("CreatorIdUserId")
                         .HasColumnType("int");
 
                     b.Property<byte[]>("Image")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int>("SharedPostId")
+                    b.Property<int?>("SharedPostIdPostId")
                         .HasColumnType("int");
 
                     b.HasKey("PostId");
+
+                    b.HasIndex("CreatorIdUserId");
+
+                    b.HasIndex("SharedPostIdPostId");
 
                     b.ToTable("TPost");
                 });
@@ -188,6 +182,50 @@ namespace PaiTwitterApi.Migrations
                         .HasName("PK__tUser__1788CC4C65F92F39");
 
                     b.ToTable("tUser");
+                });
+
+            modelBuilder.Entity("PaiTwitterApi.Models.TComment", b =>
+                {
+                    b.HasOne("PaiTwitterApi.Models.TUser", "CreatorId")
+                        .WithMany()
+                        .HasForeignKey("CreatorIdUserId");
+                });
+
+            modelBuilder.Entity("PaiTwitterApi.Models.TFollow", b =>
+                {
+                    b.HasOne("PaiTwitterApi.Models.TUser", "FollowedId")
+                        .WithMany()
+                        .HasForeignKey("FollowedIdUserId");
+
+                    b.HasOne("PaiTwitterApi.Models.TUser", "FollowerId")
+                        .WithMany()
+                        .HasForeignKey("FollowerIdUserId");
+                });
+
+            modelBuilder.Entity("PaiTwitterApi.Models.TLike", b =>
+                {
+                    b.HasOne("PaiTwitterApi.Models.TComment", "CommentId")
+                        .WithMany()
+                        .HasForeignKey("CommentId1");
+
+                    b.HasOne("PaiTwitterApi.Models.TUser", "CreatorId")
+                        .WithMany()
+                        .HasForeignKey("CreatorIdUserId");
+
+                    b.HasOne("PaiTwitterApi.Models.TPost", "PostId")
+                        .WithMany()
+                        .HasForeignKey("PostId1");
+                });
+
+            modelBuilder.Entity("PaiTwitterApi.Models.TPost", b =>
+                {
+                    b.HasOne("PaiTwitterApi.Models.TUser", "CreatorId")
+                        .WithMany()
+                        .HasForeignKey("CreatorIdUserId");
+
+                    b.HasOne("PaiTwitterApi.Models.TPost", "SharedPostId")
+                        .WithMany()
+                        .HasForeignKey("SharedPostIdPostId");
                 });
 #pragma warning restore 612, 618
         }

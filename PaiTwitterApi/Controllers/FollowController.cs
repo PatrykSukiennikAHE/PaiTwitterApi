@@ -27,7 +27,7 @@ namespace PaiTwitterApi.Controllers
         public async Task<ActionResult<IEnumerable<TFollow>>> GetFollow()
         {
             return await _context.TFollow
-                            .Where(f => f.FollowerId.UserId == User.GetLoggedInUserId<int>())
+                            .Where(f => f.FollowerId == User.GetLoggedInUserId<int>())
                             .ToListAsync();
         }
 
@@ -38,7 +38,8 @@ namespace PaiTwitterApi.Controllers
         [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Follow(int id)
         {
-            var follower = await _context.TUser.FirstOrDefaultAsync(u => u.UserId == User.GetLoggedInUserId<int>());
+            int followerId = User.GetLoggedInUserId<int>();
+            var follower = await _context.TUser.FirstOrDefaultAsync(u => u.UserId == followerId);
             var followed = await _context.TUser.FirstOrDefaultAsync(u => u.UserId == id);
 
             if (follower == null || followed == null)
@@ -51,15 +52,15 @@ namespace PaiTwitterApi.Controllers
                 return BadRequest("Nie można followować samego siebie!");
             }
 
-            var existingFollow = await _context.TFollow.FirstOrDefaultAsync(f => f.FollowerId == follower && f.FollowedId == followed);
+            var existingFollow = await _context.TFollow.FirstOrDefaultAsync(f => f.FollowerId == followerId && f.FollowedId == id);
             if (existingFollow != null)
             {
                 return BadRequest("Istnieje już taki follow!");
             }
 
             TFollow follow = new TFollow();
-            follow.FollowerId = follower;
-            follow.FollowedId = followed;
+            follow.FollowerId = followerId;
+            follow.FollowedId = id;
             _context.Add(follow);
             await _context.SaveChangesAsync();
             return Ok("Dodano follow");
@@ -72,7 +73,8 @@ namespace PaiTwitterApi.Controllers
         [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Unfollow(int id)
         {
-            var follower = await _context.TUser.FirstOrDefaultAsync(u => u.UserId == User.GetLoggedInUserId<int>());
+            int followerId = User.GetLoggedInUserId<int>();
+            var follower = await _context.TUser.FirstOrDefaultAsync(u => u.UserId == followerId);
             var followed = await _context.TUser.FirstOrDefaultAsync(u => u.UserId == id);
 
             if (follower == null || followed == null)
@@ -85,7 +87,7 @@ namespace PaiTwitterApi.Controllers
                 return BadRequest("Nie można follować samego siebie!");
             }
 
-            var existingFollow = await _context.TFollow.FirstOrDefaultAsync(f => f.FollowerId == follower && f.FollowedId == followed);
+            var existingFollow = await _context.TFollow.FirstOrDefaultAsync(f => f.FollowerId == followerId && f.FollowedId == id);
             if (existingFollow == null)
             {
                 return NotFound("Nie znaleziono takiego followa");

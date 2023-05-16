@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PaiTwitterApi.Models;
 using System;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PaiTwitterApi.Controllers
 {
-    [Route("api/post")]
+    [Authorize]
     [ApiController]
     public class PostController : Controller
     {
@@ -19,7 +20,6 @@ namespace PaiTwitterApi.Controllers
             _context = context;
         }
 
-        // GET: api/posts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TPost>>> GetPost()
         {
@@ -27,7 +27,6 @@ namespace PaiTwitterApi.Controllers
             return Ok(comment);
         }
 
-        // GET: api/posts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TPost>> GetPost(int id)
         {
@@ -41,9 +40,8 @@ namespace PaiTwitterApi.Controllers
             return Ok(post);
         }
 
-        // POST: api/posts
         [HttpPost]
-        public async Task<ActionResult<TPost>> PostProduct(TPost post)
+        public async Task<ActionResult<TPost>> PostPost(TPost post)
         {
             _context.Entry(post).State = EntityState.Added;
             await _context.SaveChangesAsync();
