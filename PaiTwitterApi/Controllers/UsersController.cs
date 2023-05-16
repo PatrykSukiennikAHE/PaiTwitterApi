@@ -47,8 +47,6 @@ namespace PaiTwitterApi.Controllers
                 return NotFound();
             }
 
-            tUser.FirstName += "  " + User.Claims.Where(c => c.Type == "Id").First().Value;
-
             return tUser;
         }
 

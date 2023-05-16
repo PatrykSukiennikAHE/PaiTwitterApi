@@ -34,6 +34,7 @@ namespace PaiTwitterApi
             services.AddDbContextPool<PaiTwitterContext>(options => options.UseSqlServer(connection));
             services.AddControllers();
             services.AddMvc();
+            services.AddHttpContextAccessor();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
             options.RequireHttpsMetadata = false;
@@ -47,6 +48,7 @@ namespace PaiTwitterApi
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
             };
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
