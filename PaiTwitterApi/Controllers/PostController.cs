@@ -20,14 +20,14 @@ namespace PaiTwitterApi.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("/post")]
         public async Task<ActionResult<IEnumerable<TPost>>> GetPost()
         {
             var comment = await _context.TPost.ToListAsync();
             return Ok(comment);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("/post/{id}")]
         public async Task<ActionResult<TPost>> GetPost(int id)
         {
             var post = await _context.TPost.SingleOrDefaultAsync(m => m.PostId == id);
@@ -40,7 +40,7 @@ namespace PaiTwitterApi.Controllers
             return Ok(post);
         }
 
-        [HttpPost]
+        [HttpPost("/post")]
         public async Task<ActionResult<TPost>> PostPost(TPost post)
         {
             _context.Entry(post).State = EntityState.Added;
