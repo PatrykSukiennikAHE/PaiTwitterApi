@@ -1,11 +1,17 @@
-import React, { Component } from "react";
+import React, { useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import Navbar from '../components/Navbar'
 
-export class Post extends Component {
-    render() {
-        return(
-            <div className="mt-5 d-flex justify-content-left">
-                Post page.
-            </div>
-        )
-    }
+export default function Post(token) {
+
+    if (!token) {
+        return <Navigate to="/login"/>
+    } 
+
+    return(
+        <div className="main-wrapper">
+          <Navbar token={token} />
+            Post page.
+        </div>
+    )
 }

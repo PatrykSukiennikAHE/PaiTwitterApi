@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PaiTwitterApi.Models;
+using PaiTwitterApi.Tools;
 
 namespace PaiTwitterApi.Controllers
 {
@@ -25,9 +26,14 @@ namespace PaiTwitterApi.Controllers
 
         // GET: Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TUser>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<TUser>>> GetUserInfo()
         {
-            return await _context.TUser.ToListAsync();
+            TUser user = await _context.TUser.Where(u => u.UserId == User.GetLoggedInUserId<int>()).FirstOrDefaultAsync();
+            return Ok(new { 
+                    id = user.UserId,
+                    firstname = user.FirstName,
+                    surname = user.LastName
+                    });
         }
 
         // GET: Users/Details/5
