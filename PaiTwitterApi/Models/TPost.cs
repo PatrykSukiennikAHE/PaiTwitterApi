@@ -12,16 +12,16 @@ namespace PaiTwitterApi.Models
         [Key]
         public int PostId { get; set; }
         public int CreatorId { get; set; }
-        public int SharedPostId { get; set; }
+        public int? SharedPostId { get; set; }
+        [StringLength(100)]
         public string ContentText { get; set; }
-        public byte[] Image { get; set; }
         public DateTime CreatedDate { get; set; }
 
         [ForeignKey("CreatorId")]
-        public TUser Creator;
+        public virtual TUser Creator { get; set; }
 
         [ForeignKey("SharedPostId")]
-        public TPost SharedPost;
+        public virtual TPost SharedPost { get; set; }
 
 
     }

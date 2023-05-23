@@ -6,21 +6,21 @@ function getUserInfo(token) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': "Bearer " + token.token.token 
+        'Authorization': "Bearer " + token 
       },
     })
       .then(data => { return data.json() } )
    }
 
-export default function Navbar(token) {
+export default function Navbar(props) {
     const [userInfo, setUserInfo] = useState();
     if (!userInfo) {
-        getUserInfo(token).then(data => setUserInfo(data))
+        getUserInfo(props.token).then(data => setUserInfo(data))
     }
 
     return (
     <div className='navbar'>
-        <table width={"100%"} height={"100%"} align="center">
+        <table width={"100%"} height={"100%"} align="center"><tbody>
         <tr>
             <td>
                 <Link to={"/home"}><img height={"40px"} src={"../logo.png"}/></Link>
@@ -39,7 +39,7 @@ export default function Navbar(token) {
                 </Link>
             </td>
         </tr>
-        </table>
+        </tbody></table>
         
     </div>
     )

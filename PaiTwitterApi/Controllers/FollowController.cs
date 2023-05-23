@@ -8,6 +8,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+public class FollowDto
+{
+    public int FollowedId { get; set; }
+    public string FollowedName { get; set; }
+}
+
 namespace PaiTwitterApi.Controllers
 {
     [Authorize]
@@ -24,11 +30,18 @@ namespace PaiTwitterApi.Controllers
         // GET: api/follows
         [HttpGet]
         [Route("api/follow/list")]
-        public async Task<ActionResult<IEnumerable<TFollow>>> GetFollow()
+        public async Task<ActionResult> GetFollow()
         {
-            return await _context.TFollow
+            return Ok(_context.TFollow
+                            .Include(f=>f.Followed)
                             .Where(f => f.FollowerId == User.GetLoggedInUserId<int>())
-                            .ToListAsync();
+                            .AsEnumerable()
+                            .Select(f => new 
+                            {
+                                FollowedId = f.FollowedId,
+                                FollowedName = f.Followed == null ? null : f.Followed.FirstName + " " + f.Followed.LastName
+                            })
+                            .ToList());
         }
 
         // POST: follows

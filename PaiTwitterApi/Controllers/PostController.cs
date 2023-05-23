@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PaiTwitterApi.Models;
+using PaiTwitterApi.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +21,26 @@ namespace PaiTwitterApi.Controllers
             _context = context;
         }
 
-        [HttpGet("/post")]
+        [HttpGet("api/post")]
         public async Task<ActionResult<IEnumerable<TPost>>> GetPost()
         {
-            var comment = await _context.TPost.ToListAsync();
-            return Ok(comment);
+            var minimumDate = DateTime.Now.AddDays(-14);
+
+            return Ok(_context.TPost
+                        .Include(p => p.Creator)
+                        .AsEnumerable()
+                        .Where(p => p.CreatedDate >= minimumDate)
+                        .Select(p => new
+                        {
+                            PostId = p.PostId,
+                            CreatedDate = p.CreatedDate.ToString("HH:mm:ss MM/dd/yyyy"),
+                            Creator = p.Creator == null ? null : p.Creator.FirstName + " " + p.Creator.LastName,
+                            ContentText = p.ContentText
+                        })
+                        .ToList());
         }
 
-        [HttpGet("/post/{id}")]
+        [HttpGet("api/post/{id}")]
         public async Task<ActionResult<TPost>> GetPost(int id)
         {
             var post = await _context.TPost.SingleOrDefaultAsync(m => m.PostId == id);
@@ -40,9 +53,12 @@ namespace PaiTwitterApi.Controllers
             return Ok(post);
         }
 
-        [HttpPost("/post")]
+        [HttpPost("api/post")]
         public async Task<ActionResult<TPost>> PostPost(TPost post)
         {
+            post.CreatedDate = DateTime.Now;
+            post.CreatorId = User.GetLoggedInUserId<int>();
+
             _context.Entry(post).State = EntityState.Added;
             await _context.SaveChangesAsync();
 

@@ -28,7 +28,7 @@
 }
 
 .main-wrapper {
-  width: 1280px;
+  width: 720px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -57,3 +57,31 @@
   margin: 5px;
 }
 
+.followingList {
+  padding: 15px;
+  text-align: center;
+}
+
+.postList {
+  width: 100%;
+}
+
+.newpost-wrapper {
+  background-color: antiquewhite;
+  padding: 15px;
+  background-color: #5191C722;
+  border-radius: 7px;
+  width: 100%;
+}
+
+.newpost-wrapper button {
+  width: 50%;
+  background: none;
+  border: none;
+  margin-top: 10px;
+}
+
+.newpost-wrapper button:hover {
+  background: #5191C744;
+  border-radius: 5px;
+}

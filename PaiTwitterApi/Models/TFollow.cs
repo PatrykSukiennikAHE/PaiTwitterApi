@@ -16,9 +16,9 @@ namespace PaiTwitterApi.Models
         public DateTime CreatedDate { get; set; }
 
         [ForeignKey("FollowedId")]
-        public TUser Followed;
+        public virtual TUser Followed { get; set; }
 
         [ForeignKey("FollowerId")]
-        public TUser Follower;
+        public virtual TUser Follower { get; set; }
     }
 }

@@ -10,8 +10,8 @@ using PaiTwitterApi.Models;
 namespace PaiTwitterApi.Migrations
 {
     [DbContext(typeof(PaiTwitterContext))]
-    [Migration("20230516171801_Models cleanup & FKs")]
-    partial class ModelscleanupFKs
+    [Migration("20230522180941_Reset migracji - coś skopałem")]
+    partial class Resetmigracjicośskopałem
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -62,6 +62,10 @@ namespace PaiTwitterApi.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("FollowId");
+
+                    b.HasIndex("FollowedId");
+
+                    b.HasIndex("FollowerId");
 
                     b.ToTable("TFollow");
                 });
@@ -130,9 +134,6 @@ namespace PaiTwitterApi.Migrations
                     b.Property<int>("CreatorId")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<int>("SharedPostId")
                         .HasColumnType("int");
 
@@ -152,6 +153,9 @@ namespace PaiTwitterApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -190,6 +194,21 @@ namespace PaiTwitterApi.Migrations
                         .HasName("PK__tUser__1788CC4C65F92F39");
 
                     b.ToTable("tUser");
+                });
+
+            modelBuilder.Entity("PaiTwitterApi.Models.TFollow", b =>
+                {
+                    b.HasOne("PaiTwitterApi.Models.TUser", "Followed")
+                        .WithMany()
+                        .HasForeignKey("FollowedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PaiTwitterApi.Models.TUser", "Follower")
+                        .WithMany()
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
