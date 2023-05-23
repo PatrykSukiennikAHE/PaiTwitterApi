@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import Navbar from '../components/Navbar'
 import FollowList from '../components/FollowList';
 import PostList from '../components/PostList';
-
+import NewPostInput from '../components/NewPostInput';
 
 async function getFeed(token) {
     return await fetch('http://localhost:58820/api/post', {
@@ -37,7 +37,14 @@ export default function Home(props) {
           <Navbar token={props.token} />
           <table width={"100%"}><tbody>
             <tr>
-              <td width={"70%"}><PostList token={props.token} refreshHandler={getFeed} feed={feed} /></td>
+              <td width={"70%"}>
+                  <table width={"100%"}>
+                    <tr><td><NewPostInput token={props.token} refreshHandler={getFeed} /> </td></tr>
+                    <tr><td><PostList token={props.token} feed={feed} /></td></tr>
+                  </table>
+                  
+                </td>
+
               <td width={"30%"}><FollowList token={props.token} /></td>
             </tr>
             </tbody></table>

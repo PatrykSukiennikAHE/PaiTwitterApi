@@ -33,24 +33,48 @@ namespace PaiTwitterApi.Controllers
                         .Select(p => new
                         {
                             PostId = p.PostId,
-                            CreatedDate = p.CreatedDate.ToString("HH:mm:ss MM/dd/yyyy"),
+                            x = (DateTime.Now.Date - p.CreatedDate.Date).Days,
+                            CreatedDate = 
+                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 0 ? p.CreatedDate.ToString("HH:mm:ss") :
+                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 1 ? "wczoraj " + p.CreatedDate.ToString("HH:mm:ss") :
+                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 2 ? "przedwczoraj " + p.CreatedDate.ToString("HH:mm:ss") :
+                                    p.CreatedDate.ToString("HH:mm:ss MM/dd/yyyy"),
+
                             Creator = p.Creator == null ? null : p.Creator.FirstName + " " + p.Creator.LastName,
+                            CreatorId = p.CreatorId,
                             ContentText = p.ContentText
                         })
+                        .OrderByDescending(p => p.CreatedDate)
+                        .Take(20)
                         .ToList());
         }
 
-        [HttpGet("api/post/{id}")]
-        public async Task<ActionResult<TPost>> GetPost(int id)
+        [HttpGet("api/post/{userId}")]
+        public async Task<ActionResult<TPost>> GetPost(int userId)
         {
-            var post = await _context.TPost.SingleOrDefaultAsync(m => m.PostId == id);
+            var minimumDate = DateTime.Now.AddDays(-14);
 
-            if (post == null)
-            {
-                return NotFound();
-            }
+            return Ok(_context.TPost
+                        .Include(p => p.Creator)
+                        .AsEnumerable()
+                        .Where(p => p.CreatedDate >= minimumDate && p.CreatorId == userId)
+                        .Select(p => new
+                        {
+                            PostId = p.PostId,
+                            x = (DateTime.Now.Date - p.CreatedDate.Date).Days,
+                            CreatedDate =
+                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 0 ? p.CreatedDate.ToString("HH:mm:ss") :
+                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 1 ? "wczoraj " + p.CreatedDate.ToString("HH:mm:ss") :
+                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 2 ? "przedwczoraj " + p.CreatedDate.ToString("HH:mm:ss") :
+                                    p.CreatedDate.ToString("HH:mm:ss MM/dd/yyyy"),
 
-            return Ok(post);
+                            Creator = p.Creator == null ? null : p.Creator.FirstName + " " + p.Creator.LastName,
+                            CreatorId = p.CreatorId,
+                            ContentText = p.ContentText
+                        })
+                        .OrderByDescending(p => p.CreatedDate)
+                        .Take(20)
+                        .ToList());
         }
 
         [HttpPost("api/post")]

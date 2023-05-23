@@ -85,3 +85,40 @@
   background: #5191C744;
   border-radius: 5px;
 }
+
+.post-wrapper {
+  text-align: left;
+  padding: 15px;
+  margin-top: 15px;
+  width: 100%;
+  background: #5191C711;
+}
+
+.post-wrapper a {
+  font-weight: 600;
+  color: #193042;
+  text-decoration: none;
+  width: 100%;
+
+}
+
+.post-text-wrapper a {
+  margin: 5px;
+  width: 100%;
+  padding: 20px;
+  color: #48545e;
+}
+
+.post-date {
+  float: right;
+  color: grey;
+}
+
+.profileheader-wrapper {
+  background-color: antiquewhite;
+  padding: 15px;
+  background-color: #5191C722;
+  border-radius: 7px;
+  width: 100%;
+  text-align: left;
+}

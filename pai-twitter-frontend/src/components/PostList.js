@@ -20,17 +20,13 @@ export default function PostList(props) {
     return (
     <div className='postList'>
         <table width={"100%"} height={"100%"} align="center"><tbody>
-        <tr><td>
-            <NewPostInput token={props.token} refreshHandler={props.refreshHandler} />    
-        </td></tr>
-
         {
             posts && posts.length > 0 && posts.map(post => {
                     return(
                     <tr key={post.postId}><td>
-                        <div>
-                        <p>{post.creator} <span color='grey'>{post.createdDate}</span></p> 
-                        <p>{post.contentText}</p>
+                        <div className='post-wrapper'>
+                        <Link to={"/profile/" + post.creatorId}>{post.creator}</Link> <span className='post-date'>{post.createdDate}</span>
+                        <div className='post-text-wrapper'>{post.contentText}</div>
                         </div>
                     </td></tr>
                     )
