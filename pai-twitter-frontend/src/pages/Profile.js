@@ -44,7 +44,7 @@ export default function Profile(props) {
                     <tr><td><PostList token={props.token} feed={feed} /></td></tr>
                 </table>
               </td>
-              <td width={"30%"}><FollowList token={props.token} /></td>
+              <td width={"30%"} style={{verticalAlign: "top"}}><FollowList token={props.token} /></td>
             </tr>
             </tbody></table>
         </div>

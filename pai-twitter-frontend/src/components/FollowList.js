@@ -24,11 +24,11 @@ export default function FollowList(props) {
 
     return (
     <div className='followingList'>
-        <table width={"100%"} height={"100%"} align="center"><tbody>
+        <table width={"100%"} height={"100%"}><tbody>
         {
             followingInfo && followingInfo.map(following => {
                 return(
-                    <tr><td>
+                    <tr className='followlist-item-wrapper'><td>
                         <Link to={"/profile/" + following.followedId}>
                             {following.followedName}
                         </Link>
@@ -40,6 +40,7 @@ export default function FollowList(props) {
             followingInfo && followingInfo.length == 0 && 
                 <tr><td>Nikogo nie śledzisz</td></tr>
         }
+        
         </tbody></table>
         
     </div>

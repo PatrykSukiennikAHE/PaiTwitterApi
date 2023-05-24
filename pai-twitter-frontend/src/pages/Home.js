@@ -35,17 +35,17 @@ export default function Home(props) {
     return(
         <div className="main-wrapper">
           <Navbar token={props.token} />
-          <table width={"100%"}><tbody>
+          <table height={"100px"} width={"100%"}><tbody>
             <tr>
               <td width={"70%"}>
-                  <table width={"100%"}>
+                  <table width={"100%"}><tbody>
                     <tr><td><NewPostInput token={props.token} refreshHandler={getFeed} /> </td></tr>
                     <tr><td><PostList token={props.token} feed={feed} /></td></tr>
-                  </table>
+                    </tbody></table>
                   
                 </td>
 
-              <td width={"30%"}><FollowList token={props.token} /></td>
+              <td width={"30%"} height={"100%"}><FollowList token={props.token} /></td>
             </tr>
             </tbody></table>
         </div>

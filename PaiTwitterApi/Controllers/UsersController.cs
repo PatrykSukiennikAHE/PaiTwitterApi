@@ -53,7 +53,21 @@ namespace PaiTwitterApi.Controllers
                 return NotFound();
             }
 
-            return tUser;
+            var follow = await _context.TFollow
+                    .Where(f => 
+                                f.FollowerId == User.GetLoggedInUserId<int>()
+                                && f.FollowedId == id
+                                ).FirstOrDefaultAsync();
+
+            return Ok(new
+            {
+                id = tUser.UserId,
+                FirstName = tUser.FirstName,
+                LastName = tUser.LastName,
+                Description = tUser.Description,
+                isFollowed = follow == null ? 0 : 1,
+                isSelf = tUser.UserId == User.GetLoggedInUserId<int>() ? 1 : 0
+            });
         }
 
         // POST: Users

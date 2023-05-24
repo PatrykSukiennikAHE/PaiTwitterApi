@@ -35,9 +35,9 @@ namespace PaiTwitterApi.Controllers
                             PostId = p.PostId,
                             x = (DateTime.Now.Date - p.CreatedDate.Date).Days,
                             CreatedDate = 
-                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 0 ? p.CreatedDate.ToString("HH:mm:ss") :
-                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 1 ? "wczoraj " + p.CreatedDate.ToString("HH:mm:ss") :
-                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 2 ? "przedwczoraj " + p.CreatedDate.ToString("HH:mm:ss") :
+                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 0 ? p.CreatedDate.ToString("HH:mm") :
+                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 1 ? "wczoraj " + p.CreatedDate.ToString("HH:mm") :
+                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 2 ? "przedwczoraj " + p.CreatedDate.ToString("HH:mm") :
                                     p.CreatedDate.ToString("HH:mm:ss MM/dd/yyyy"),
 
                             Creator = p.Creator == null ? null : p.Creator.FirstName + " " + p.Creator.LastName,
@@ -63,9 +63,9 @@ namespace PaiTwitterApi.Controllers
                             PostId = p.PostId,
                             x = (DateTime.Now.Date - p.CreatedDate.Date).Days,
                             CreatedDate =
-                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 0 ? p.CreatedDate.ToString("HH:mm:ss") :
-                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 1 ? "wczoraj " + p.CreatedDate.ToString("HH:mm:ss") :
-                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 2 ? "przedwczoraj " + p.CreatedDate.ToString("HH:mm:ss") :
+                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 0 ? p.CreatedDate.ToString("HH:mm") :
+                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 1 ? "wczoraj " + p.CreatedDate.ToString("HH:mm") :
+                                (DateTime.Now.Date - p.CreatedDate.Date).Days == 2 ? "przedwczoraj " + p.CreatedDate.ToString("HH:mm") :
                                     p.CreatedDate.ToString("HH:mm:ss MM/dd/yyyy"),
 
                             Creator = p.Creator == null ? null : p.Creator.FirstName + " " + p.Creator.LastName,
