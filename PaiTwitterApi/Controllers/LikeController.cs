@@ -21,7 +21,6 @@ namespace PaiTwitterApi.Controllers
             _context = context;
         }
 
-        // GET: api/likes
         [HttpGet("api/likes/{postId}")]
         public async Task<ActionResult<IEnumerable<TLike>>> GetLike(int postId)
         {

@@ -28,7 +28,7 @@ namespace InventoryService.Controllers
         public async Task<IActionResult> Post(TUser _userData)
         {
 
-            if (_userData != null && _userData.Email != null && _userData.Password != null)
+            if (_userData != null && (_userData.Email != null) && _userData.Password != null)
             {
                 var user = await GetUser(_userData.Email, _userData.Password);
 

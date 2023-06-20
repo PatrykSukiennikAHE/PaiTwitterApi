@@ -31,7 +31,6 @@ namespace PaiTwitterApi.Controllers
 
 
         [HttpPost("api/comment/{postId}")]
-        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> CommentPost(int postId, [Bind("ContentText")] TComment comment)
         {
             int userId = User.GetLoggedInUserId<int>();
@@ -46,7 +45,7 @@ namespace PaiTwitterApi.Controllers
                 await _context.SaveChangesAsync();
                 return Ok();
             }
-            return BadRequest();
+            else return BadRequest();
 
             if (user == null || post == null)
             {

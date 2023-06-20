@@ -27,7 +27,7 @@ namespace PaiTwitterApi.Controllers
             _context = context;
         }
 
-        // GET: api/follows
+
         [HttpGet]
         [Route("api/follow/list")]
         public async Task<ActionResult> GetFollow()
@@ -44,16 +44,14 @@ namespace PaiTwitterApi.Controllers
                             .ToList());
         }
 
-        // POST: follows
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("api/follow/{id}")]
+
+        [HttpPost("api/follow/{userId}")]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> Follow(int id)
+        public async Task<IActionResult> Follow(int userId)
         {
             int followerId = User.GetLoggedInUserId<int>();
             var follower = await _context.TUser.FirstOrDefaultAsync(u => u.UserId == followerId);
-            var followed = await _context.TUser.FirstOrDefaultAsync(u => u.UserId == id);
+            var followed = await _context.TUser.FirstOrDefaultAsync(u => u.UserId == userId);
 
             if (follower == null || followed == null)
             {
@@ -65,7 +63,7 @@ namespace PaiTwitterApi.Controllers
                 return BadRequest("Nie można followować samego siebie!");
             }
 
-            var existingFollow = await _context.TFollow.FirstOrDefaultAsync(f => f.FollowerId == followerId && f.FollowedId == id);
+            var existingFollow = await _context.TFollow.FirstOrDefaultAsync(f => f.FollowerId == followerId && f.FollowedId == userId);
             if (existingFollow != null)
             {
                 return BadRequest("Istnieje już taki follow!");
@@ -73,22 +71,19 @@ namespace PaiTwitterApi.Controllers
 
             TFollow follow = new TFollow();
             follow.FollowerId = followerId;
-            follow.FollowedId = id;
+            follow.FollowedId = userId;
             _context.Add(follow);
             await _context.SaveChangesAsync();
             return Ok("Dodano follow");
         }
 
-        // POST: follows
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("api/unfollow/{id}")]
+        [HttpPost("api/unfollow/{userId}")]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> Unfollow(int id)
+        public async Task<IActionResult> Unfollow(int userId)
         {
             int followerId = User.GetLoggedInUserId<int>();
             var follower = await _context.TUser.FirstOrDefaultAsync(u => u.UserId == followerId);
-            var followed = await _context.TUser.FirstOrDefaultAsync(u => u.UserId == id);
+            var followed = await _context.TUser.FirstOrDefaultAsync(u => u.UserId == userId);
 
             if (follower == null || followed == null)
             {
@@ -100,7 +95,7 @@ namespace PaiTwitterApi.Controllers
                 return BadRequest("Nie można follować samego siebie!");
             }
 
-            var existingFollow = await _context.TFollow.FirstOrDefaultAsync(f => f.FollowerId == followerId && f.FollowedId == id);
+            var existingFollow = await _context.TFollow.FirstOrDefaultAsync(f => f.FollowerId == followerId && f.FollowedId == userId);
             if (existingFollow == null)
             {
                 return NotFound("Nie znaleziono takiego followa");

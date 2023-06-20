@@ -11,8 +11,6 @@ using PaiTwitterApi.Tools;
 
 namespace PaiTwitterApi.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
     [ApiController]
     public class UsersController : Controller
     {
@@ -24,8 +22,9 @@ namespace PaiTwitterApi.Controllers
             _context = context;
         }
 
-        // GET: Users
+        [Authorize]
         [HttpGet]
+        [Route("api/users")]
         public async Task<ActionResult<IEnumerable<TUser>>> GetUserInfo()
         {
             TUser user = await _context.TUser.Where(u => u.UserId == User.GetLoggedInUserId<int>()).FirstOrDefaultAsync();
@@ -36,8 +35,9 @@ namespace PaiTwitterApi.Controllers
                     });
         }
 
-        // GET: Users/Details/5
-        [HttpGet("{id}")]
+        [Authorize]
+        [Route("api/users/{id}")]
+        [HttpGet]
         public async Task<ActionResult<TUser>> GetUsers(int? id)
         {
             
@@ -70,26 +70,29 @@ namespace PaiTwitterApi.Controllers
             });
         }
 
-        // POST: Users
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,FirstName,LastName,UserName,Email,Password,CreatedDate,LastActivity")] TUser tUser)
+        [Route("api/users/register")]
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,UserName,Email,Password")] TUser tUser)
         {
             if (ModelState.IsValid)
             {
+                TUser user = await _context.TUser.FirstOrDefaultAsync(u => u.Email == tUser.Email || u.UserName == tUser.UserName);
+                if (user != null) {
+                    return BadRequest("Konto z taką nazwą lub emailem jest już zajęte");
+                }
+
+                tUser.CreatedDate = DateTime.Now;
+
                 _context.Add(tUser);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
-            return BadRequest();
+            return NotFound();
         }
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
+        [Authorize]
+        [Route("api/users/{id}")]
+        [HttpPut]
         public async Task<IActionResult> EditUser(int id, TUser TUser)
         {
             if (id != TUser.UserId)
@@ -119,8 +122,9 @@ namespace PaiTwitterApi.Controllers
         }
 
 
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
+        [Authorize]
+        [Route("api/users/{id}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteUser(int? id)
         {
             if (id == null)

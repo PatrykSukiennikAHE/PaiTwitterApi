@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import configData from "../config.json";
 
-async function loginUser(credentials) {
+async function registerUser(credentials) {
     return fetch(configData.BASE_URL + '/token/', {
       method: 'POST',
       headers: {
@@ -13,7 +13,7 @@ async function loginUser(credentials) {
       .then(data => data.json())
    }
 
-export default function Login({ setToken }) {
+export default function Register({ setToken }) {
   
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
