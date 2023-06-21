@@ -52,12 +52,12 @@ namespace InventoryService.Controllers
                 }
                 else
                 {
-                    return BadRequest("Invalid credentials");
+                    return BadRequest(new { error = "Niepoprawne dane logowania" });
                 }
             }
             else
             {
-                return BadRequest();
+                return BadRequest(new { error = "Błąd logowania" });
             }
         }
 

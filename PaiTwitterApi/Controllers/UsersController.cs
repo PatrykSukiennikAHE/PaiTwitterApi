@@ -74,20 +74,28 @@ namespace PaiTwitterApi.Controllers
         [Route("api/users/register")]
         public async Task<IActionResult> Create([Bind("FirstName,LastName,UserName,Email,Password")] TUser tUser)
         {
-            if (ModelState.IsValid)
+            try
             {
-                TUser user = await _context.TUser.FirstOrDefaultAsync(u => u.Email == tUser.Email || u.UserName == tUser.UserName);
-                if (user != null) {
-                    return BadRequest("Konto z taką nazwą lub emailem jest już zajęte");
+                if (ModelState.IsValid)
+                {
+                    TUser user = await _context.TUser.FirstOrDefaultAsync(u => u.Email == tUser.Email || u.UserName == tUser.UserName);
+                    if (user != null)
+                    {
+                        return BadRequest(new { error = "Konto z taką nazwą lub emailem jest już zajęte" });
+                    }
+
+                    tUser.CreatedDate = DateTime.Now;
+
+                    _context.Add(tUser);
+                    await _context.SaveChangesAsync();
+                    return Ok();
                 }
-
-                tUser.CreatedDate = DateTime.Now;
-
-                _context.Add(tUser);
-                await _context.SaveChangesAsync();
-                return Ok();
+                return BadRequest();
+            } catch(Exception e)
+            {
+                return BadRequest(new { error = e.Message });
             }
-            return NotFound();
+            
         }
 
         [Authorize]
@@ -149,5 +157,30 @@ namespace PaiTwitterApi.Controllers
         {
             return _context.TUser.Any(e => e.UserId == id);
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("api/usersearch/{phrase}")]
+        public async Task<ActionResult<IEnumerable<TUser>>> GetUserBySearchPhrase(String? phrase)
+        {
+            return Ok(_context.TUser
+                        .AsEnumerable()
+                        .Where(u => 
+                                u.UserId != User.GetLoggedInUserId<int>()
+                                && (u.FirstName.Contains(phrase) || u.LastName.Contains(phrase))
+                                )
+                        .Select(u => new
+                        {
+                            UserId = u.UserId,
+                            Name = u.FirstName + " " + u.LastName,
+                            UserName = u.UserName,
+                            LastActivity = u.LastActivity
+                        })
+                        .OrderByDescending(u => u.LastActivity)
+                        .Take(20)
+                        .ToList());
+        }
     }
+
+
 }

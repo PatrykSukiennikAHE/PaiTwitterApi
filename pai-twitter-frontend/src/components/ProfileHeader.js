@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
+import { Button } from 'primereact/button';
 
 async function getUserInfo(token, profileId) {
     return await fetch('http://localhost:58820/api/users/' + profileId, {
@@ -57,8 +58,8 @@ export default function ProfileHeader(props) {
     const button = userInfo ?
                             userInfo.isSelf ? <></> 
                                 
-                                : userInfo.isFollowed ? <button onClick={() => {unfollow(props.token, profileIdState); setUserInfo(undefined)}} style={{float: "right"}}>Unfollow</button> 
-                                : <button onClick={() => {follow(props.token, profileIdState); setUserInfo(undefined)}} style={{float: "right"}}>Follow</button>
+                                : userInfo.isFollowed ? <Button onClick={() => {unfollow(props.token, profileIdState); setUserInfo(undefined)}} style={{float: "right"}}>Przestań śledzić</Button> 
+                                : <Button onClick={() => {follow(props.token, profileIdState); setUserInfo(undefined)}} style={{float: "right"}}>Śledź</Button>
 
                             : <></>
 

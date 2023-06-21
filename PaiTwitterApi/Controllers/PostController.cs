@@ -41,6 +41,7 @@ namespace PaiTwitterApi.Controllers
                                     p.CreatedDate.ToString("HH:mm:ss MM/dd/yyyy"),
 
                             Creator = p.Creator == null ? null : p.Creator.FirstName + " " + p.Creator.LastName,
+                            CreatorUserName = p.Creator == null ? null : " @" + p.Creator.UserName,
                             CreatorId = p.CreatorId,
                             ContentText = p.ContentText
                         })

@@ -12,6 +12,8 @@ import Profile from './pages/Profile';
 import Post from './pages/Post';
 import useToken from './UseToken';
 
+import "primereact/resources/themes/bootstrap4-light-blue/theme.css";     
+import "primereact/resources/primereact.min.css";    
 
 function App() {
   const { token, setToken } = useToken();

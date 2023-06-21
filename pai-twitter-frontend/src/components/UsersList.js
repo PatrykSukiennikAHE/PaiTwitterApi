@@ -5,20 +5,20 @@ import { format } from 'date-fns'
 import { Card } from 'primereact/card';
 import { Divider } from 'primereact/divider';
 
-export default function PostList(props) {
-    const posts = props.feed
-    
+export default function UserList(props) {
+    const users = props.users
+
+    console.log(users)
+
     return (
     <div className='postList'>
         <table width={"100%"} height={"100%"} align="center"><tbody>
         {
-            posts && posts.length > 0 && posts.map(post => {
+            users && users.length > 0 && users.map(user => {
                     return(
-                    <tr key={post.postId}><td>
-                    <Divider  type="dashed"/>
+                    <tr key={user.userId}><td>
                         <div className='post-wrapper'>
-                        <span color='grey'>{post.creator}</span><Link to={"/profile/" + post.creatorId}>{post.creatorUserName}</Link> <span className='post-date'>{post.createdDate}</span>
-                        <div className='post-text-wrapper'>{post.contentText}</div>
+                        <Link to={"/profile/" + user.userId}><span color='grey'>{user.name}</span> @{user.userName}</Link>
                         </div>
                     </td></tr>
                 
@@ -26,8 +26,8 @@ export default function PostList(props) {
             })
         }
         {
-            posts && posts.length == 0 && 
-                <tr><td>Brak postów</td></tr>
+            users && users.length == 0 && 
+                <tr><td>Brak wyników</td></tr>
         }
         </tbody></table>
         

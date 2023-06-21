@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 
+
 function getFollowingInfo(token) {
     return fetch('http://localhost:58820/api/follow/list/', {
       method: 'GET',

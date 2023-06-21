@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar'
 import FollowList from '../components/FollowList';
 import PostList from '../components/PostList';
 import NewPostInput from '../components/NewPostInput';
+import UserList from '../components/UsersList';
 
 async function getFeed(token) {
     return await fetch('http://localhost:58820/api/post', {
@@ -19,6 +20,7 @@ async function getFeed(token) {
 
 export default function Home(props) {
   const [feed, setFeed] = useState();
+  const [usersFound, setUsersFound] = useState();
 
     if (props.token === undefined) {
         return <Navigate to="/login"/>
@@ -32,15 +34,19 @@ export default function Home(props) {
         })
     }
 
+    const listToShow = usersFound ? <UserList users={usersFound} /> : <tr><td><PostList token={props.token} feed={feed} /></td></tr>
+
     return(
         <div className="main-wrapper">
-          <Navbar token={props.token} />
+          <Navbar token={props.token} setUsersFound={ setUsersFound }/>
           <table height={"100px"} width={"100%"}><tbody>
             <tr>
               <td width={"70%"}>
                   <table width={"100%"}><tbody>
-                    <tr><td><NewPostInput token={props.token} refreshHandler={getFeed} /> </td></tr>
-                    <tr><td><PostList token={props.token} feed={feed} /></td></tr>
+                    <tr><td><NewPostInput token={props.token} refreshHandler={ setFeed }/> </td></tr>
+
+                    { listToShow }
+                    
                     </tbody></table>
                   
                 </td>
